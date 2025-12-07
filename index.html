@@ -6,7 +6,184 @@ import React, { useState } from 'react';
 
 export default function OPTGuide() {
   const [programEndDate, setProgramEndDate] = useState('');
+  const [startDate, set<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OPT Guide for International Students</title>
+
+<meta name="description" content="Step-by-step Post Completion OPT guide for F-1 International Students. Includes start date rules, I-765 filing instructions, SEVP portal reporting, and unemployment limits.">
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- React / Babel CDN -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { -webkit-font-smoothing: antialiased; font-family: system-ui, sans-serif; }
+</style>
+</head>
+
+<body class="bg-gray-50">
+<div id="root"></div>
+
+<!-- =================== INLINE REACT APP =================== -->
+<script type="text/babel">
+
+function OPTGuide() {
+  const { useState } = React;
+
+  const [programEndDate, setProgramEndDate] = useState('');
   const [startDate, setStartDate] = useState('');
+  const [errors, setErrors] = useState([]);
+  const [showSummary, setShowSummary] = useState(false);
+
+  function parseDate(d) {
+    if (!d) return null;
+    const t = new Date(d + "T00:00:00");
+    return Number.isNaN(t.getTime()) ? null : t;
+  }
+
+  function validateDates() {
+    const errs = [];
+    const pEnd = parseDate(programEndDate);
+    const sDate = parseDate(startDate);
+
+    if (!pEnd) errs.push("❗ Please enter a valid Program End Date.");
+    if (!sDate) errs.push("❗ Please enter a valid OPT Start Date.");
+
+    if (pEnd && sDate) {
+      const min = new Date(pEnd);
+      min.setDate(min.getDate() + 1);
+
+      const max = new Date(pEnd);
+      max.setDate(max.getDate() + 60);
+
+      if (sDate < min || sDate > max) {
+        errs.push("⚠ OPT start date must be within 60 days after your program end date.");
+      }
+    }
+
+    setErrors(errs);
+    return errs.length === 0;
+  }
+
+  function handleCheck(e) {
+    e.preventDefault();
+    const ok = validateDates();
+    setShowSummary(ok);
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white p-6">
+      <header className="max-w-4xl mx-auto text-center py-8">
+        <h1 className="text-4xl font-extrabold text-sky-800">OPT Guide for F-1 Students</h1>
+        <p className="mt-3 text-gray-700 text-lg">Understand Post-Completion OPT, deadlines, documents, and employment rules.</p>
+      </header>
+
+      <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section className="lg:col-span-2 bg-white shadow-lg rounded-2xl p-6">
+        
+          <h2 className="text-2xl font-semibold text-gray-800">OPT Overview</h2>
+          <p className="mt-2 text-gray-700">
+            OPT allows F-1 students to work in the U.S. for up to 12 months in a job directly related to their major.
+            <strong> You do NOT need a job offer to apply.</strong>
+          </p>
+
+          <article className="mt-6">
+            <h3 className="text-xl font-bold text-gray-800">📌 Selecting Your Start Date</h3>
+            <p className="mt-2 text-gray-700">
+              You MUST choose an OPT start date within the 60-day period after your program end date.
+              Once your I-765 is filed, changing your start date may not be possible.
+            </p>
+          </article>
+
+          <article className="mt-6">
+            <h3 className="text-xl font-bold text-gray-800">📄 Required Documents</h3>
+            <ul className="list-disc pl-6 mt-2 text-gray-700">
+              <li>New I-20 with OPT recommendation</li>
+              <li>Passport ID page</li>
+              <li>Visa page</li>
+              <li>I-94 printout</li>
+              <li>Two U.S. passport photos (2x2 inches)</li>
+              <li>Previous EAD (if any)</li>
+            </ul>
+          </article>
+
+          <article className="mt-6">
+            <h3 className="text-xl font-bold text-gray-800">🧾 Filing Your OPT</h3>
+            <p className="mt-2 text-gray-700">
+              After you receive the updated I-20, you can file your I-765 online.
+            </p>
+            <a href="https://www.uscis.gov/i-765" target="_blank" className="underline text-sky-700 font-semibold">USCIS I-765 Filing Portal</a>
+          </article>
+
+          <article className="mt-6">
+            <h3 className="text-xl font-bold text-gray-800">📌 Unemployment Limit</h3>
+            <p className="mt-2 text-gray-700">
+              You cannot exceed <strong>90 days of unemployment</strong> during OPT.
+              Employment must be related to your major and reported in SEVP Portal.
+            </p>
+          </article>
+
+        </section>
+
+        <aside className="bg-white shadow rounded-2xl p-6">
+          <h3 className="text-xl font-bold text-gray-800">🧮 OPT Start Date Checker</h3>
+
+          <form className="mt-4" onSubmit={handleCheck}>
+            <label className="block text-sm font-medium text-gray-700">Program End Date</label>
+            <input type="date" value={programEndDate} onChange={e => setProgramEndDate(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" />
+
+            <label className="block text-sm font-medium text-gray-700 mt-4">Desired OPT Start Date</label>
+            <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2" />
+
+            <button className="mt-4 w-full py-2 rounded-lg bg-sky-700 text-white font-semibold hover:bg-sky-800">
+              Validate
+            </button>
+          </form>
+
+          {errors.length > 0 && (
+            <div className="mt-4 bg-red-50 border border-red-200 text-red-800 p-3 rounded">
+              <ul className="list-disc pl-5">
+                {errors.map((err, i) => <li key={i}>{err}</li>)}
+              </ul>
+            </div>
+          )}
+
+          {showSummary && (
+            <div className="mt-4 bg-green-50 border border-green-200 text-green-800 p-3 rounded">
+              <h4 className="font-semibold">✔ Valid OPT Start Date</h4>
+              <p className="mt-2 text-sm">Keep a copy of your I-20 and the USCIS receipt notice.</p>
+            </div>
+          )}
+        </aside>
+      </main>
+
+      <footer className="max-w-4xl mx-auto text-center py-10 text-gray-600 text-sm">
+        <p>⚠ This website provides general guidance only. Contact your DSO for school-specific instructions.</p>
+      </footer>
+    </div>
+  );
+}
+
+// Render App
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<OPTGuide />);
+
+</script>
+<!-- ============================================================== -->
+
+</body>
+</html>
+StartDate] = useState('');
   const [errors, setErrors] = useState([]);
   const [showSummary, setShowSummary] = useState(false);
 
